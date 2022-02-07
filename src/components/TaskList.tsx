@@ -10,21 +10,57 @@ interface Task {
   isComplete: boolean;
 }
 
+
 export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
-    // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
-  }
+    // Crie uma nova task com um id random, não permita criar caso o título seja vazio.     
+      
+    if (newTaskTitle) {
+
+      setTasks(existingTasks => {
+        return [...existingTasks, 
+              {
+              id: Math.random(),
+              title: `${newTaskTitle}`,
+              isComplete: false,
+              }   
+        ]
+      })     
+      setNewTaskTitle('')
+    }   
+}
+    
+
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
-  }
+    //https://www.codingdeft.com/posts/react-usestate-array/#modifying-an-item-in-the-array
+
+        setTasks(existingTasks => {
+          return existingTasks.map(task => {
+              if (task.id == id) {
+                task.isComplete = !task.isComplete
+              } 
+              return task
+          })                
+        })   
+      }      
+    
+  
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
-  }
+
+    setTasks(existingTasks => {
+      return existingTasks.filter(task => {
+          if (task.id !== id) return task
+      })                
+    })   
+        
+}
 
   return (
     <section className="task-list container">
